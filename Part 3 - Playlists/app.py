@@ -1,6 +1,5 @@
 from flask import Flask, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
-
 from models import db, connect_db, Playlist, Song, PlaylistSong
 from forms import NewSongForPlaylistForm, SongForm, PlaylistForm
 
@@ -46,8 +45,8 @@ def show_playlist(playlist_id):
     """Show detail on specific playlist."""
 
     playlist = Playlist.query.get_or_404(playlist_id)
-
-    return render_template("playlist.html", playlist=playlist)
+    songs = [PlaylistSong.query.get_or_404(playlist_id)]
+    return render_template("playlist.html", playlist=playlist, songs=songs)
 
 
 @app.route("/playlists/add", methods=["GET", "POST"])
@@ -121,23 +120,22 @@ def add_song():
 def add_song_to_playlist(playlist_id):
     """Add a playlist and redirect to list."""
 
-    # BONUS - ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
-
-    # THE SOLUTION TO THIS IS IN A HINT IN THE ASSESSMENT INSTRUCTIONS
-
     playlist = Playlist.query.get_or_404(playlist_id)
     form = NewSongForPlaylistForm()
 
     # Restrict form to songs not already on this playlist
 
-    curr_on_playlist = PlaylistSong.query.get_or_404(song_id)
-    form.song.choices = Song.query.all()
+    curr_on_playlist = [song.id for song.id in playlist.songs]
+    form.song.choices = (db.session.query(Song.id, Song.title).filter(
+        Song.id.notin_(curr_on_playlist)).all())
 
     if form.validate_on_submit():
 
         song = form.song.data
         playlist_song = PlaylistSong(playlist_id=playlist_id, song_id=song)
 
+        db.session.add(playlist_song)
+        db.session.commit()
         return redirect(f"/playlists/{playlist_id}")
 
     return render_template("add_song_to_playlist.html",

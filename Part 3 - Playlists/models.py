@@ -14,6 +14,8 @@ class Playlist(db.Model):
     name = db.Column(db.String, unique=True, nullable=False)
     description = db.Column(db.String, nullable=False)
 
+    songs = db.relationship('PlaylistSong', backref='playlist')
+
 
 class Song(db.Model):
     """Song."""
@@ -23,6 +25,8 @@ class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String, nullable=False)
     artist = db.Column(db.String, nullable=False)
+
+    playlist = db.relationship('PlaylistSong', backref='song')
 
 
 class PlaylistSong(db.Model):
