@@ -11,8 +11,8 @@
 
 
 <div class="text-danger">
-  {% for song in songs %}
-  <p>{{ song.id }}</p>
+  {% for s in songs %}
+  <p>{{ s.song.title }}</p>
   {% endfor %}
 </div>
 

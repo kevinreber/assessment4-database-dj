@@ -6,7 +6,7 @@ from forms import NewSongForPlaylistForm, SongForm, PlaylistForm
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///playlist-app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
+# app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 db.create_all()
@@ -45,7 +45,8 @@ def show_playlist(playlist_id):
     """Show detail on specific playlist."""
 
     playlist = Playlist.query.get_or_404(playlist_id)
-    songs = [PlaylistSong.query.get_or_404(playlist_id)]
+    songs = playlist.songs
+
     return render_template("playlist.html", playlist=playlist, songs=songs)
 
 
@@ -124,8 +125,15 @@ def add_song_to_playlist(playlist_id):
     form = NewSongForPlaylistForm()
 
     # Restrict form to songs not already on this playlist
+    print('**************************************************')
+    print('**************************************************')
+    for s in playlist.songs:
+        print('SONG*******************************************')
+        print(s.song.title)
+    print('**************************************************')
+    print('**************************************************')
 
-    curr_on_playlist = [song.id for song.id in playlist.songs]
+    curr_on_playlist = [song.id for song in playlist.songs]
     form.song.choices = (db.session.query(Song.id, Song.title).filter(
         Song.id.notin_(curr_on_playlist)).all())
 

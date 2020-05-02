@@ -26,7 +26,7 @@ class Song(db.Model):
     title = db.Column(db.String, nullable=False)
     artist = db.Column(db.String, nullable=False)
 
-    playlist = db.relationship('PlaylistSong', backref='song')
+    playlists = db.relationship('PlaylistSong', backref='song')
 
 
 class PlaylistSong(db.Model):
