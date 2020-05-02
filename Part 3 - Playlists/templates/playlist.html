@@ -9,10 +9,9 @@
   {% endif %}
 </div>
 
-
 <div class="text-danger">
   {% for s in songs %}
-  <p>{{ s.song.title }}</p>
+  <p><a href="/songs/{{ s.song.id }}">{{ s.song.title }}</a></p>
   {% endfor %}
 </div>
 

@@ -91,7 +91,9 @@ def show_song(song_id):
     """return a specific song"""
 
     song = Song.query.get_or_404(song_id)
-    return render_template("song.html", song=song)
+    playlists = song.playlists
+
+    return render_template("song.html", song=song, playlists=playlists)
 
 
 @app.route("/songs/add", methods=["GET", "POST"])
@@ -124,18 +126,15 @@ def add_song_to_playlist(playlist_id):
     playlist = Playlist.query.get_or_404(playlist_id)
     form = NewSongForPlaylistForm()
 
-    # Restrict form to songs not already on this playlist
-    print('**************************************************')
-    print('**************************************************')
-    for s in playlist.songs:
-        print('SONG*******************************************')
-        print(s.song.title)
-    print('**************************************************')
-    print('**************************************************')
-
+    # Stores current playlist song id's
     curr_on_playlist = [song.id for song in playlist.songs]
-    form.song.choices = (db.session.query(Song.id, Song.title).filter(
-        Song.id.notin_(curr_on_playlist)).all())
+
+    # Restrict form to songs not already on this playlist
+    song_choices = db.session.query(Song.id, Song.title).filter(
+        Song.id.notin_(curr_on_playlist)).all()
+
+    # Display choices on form
+    form.song.choices = (song_choices)
 
     if form.validate_on_submit():
 

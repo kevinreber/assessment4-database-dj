@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %}{{song.title}}{% endblock %}
+
 {% block content %}
 
 <div class="jumbotron">
@@ -8,8 +10,8 @@
 </div>
 
 <ul>
-  {% for song in playlist.songs %}
-  <li>{{ song.title }}</li>
+  {% for p in playlists %}
+  <li><a href="/playlists/{{ p.playlist.id }}">{{ p.playlist.name }}</a></li>
   {% endfor %}
 </ul>
 
