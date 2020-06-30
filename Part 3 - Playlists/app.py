@@ -20,6 +20,8 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
+# ! TODO: CHECK COMMENTS FOR FEEDBACK
+
 
 @app.route("/")
 def root():
@@ -95,7 +97,6 @@ def show_song(song_id):
 
     return render_template("song.html", song=song, playlists=playlists)
 
-
 @app.route("/songs/add", methods=["GET", "POST"])
 def add_song():
     """Handle add-song form:
@@ -105,6 +106,7 @@ def add_song():
     """
     form = SongForm()
 
+# ! Handle if user inputs non-valid
     if form.validate_on_submit():
         title = form.title.data
         artist = form.artist.data
@@ -118,7 +120,9 @@ def add_song():
 
     return render_template("new_song.html", form=form)
 
-
+# ! spaces in strings
+# ! check valid name
+# ! description check if empty string
 @app.route("/playlists/<int:playlist_id>/add-song", methods=["GET", "POST"])
 def add_song_to_playlist(playlist_id):
     """Add a playlist and redirect to list."""

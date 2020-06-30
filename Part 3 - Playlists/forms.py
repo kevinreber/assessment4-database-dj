@@ -7,15 +7,15 @@ from flask_wtf import FlaskForm
 class PlaylistForm(FlaskForm):
     """Form for adding playlists."""
 
-    name = StringField("Name", [validators.InputRequired()])
+    name = StringField("Name*", [validators.InputRequired()])
     description = StringField("Description")
 
 
 class SongForm(FlaskForm):
     """Form for adding songs."""
 
-    title = StringField("Title", [validators.InputRequired()])
-    artist = StringField("Artist", [validators.InputRequired()])
+    title = StringField("Title*", [validators.InputRequired()])
+    artist = StringField("Artist*", [validators.InputRequired()])
 
 
 # DO NOT MODIFY THIS FORM - EVERYTHING YOU NEED IS HERE
