@@ -106,10 +106,14 @@ def add_song():
     """
     form = SongForm()
 
-# ! Handle if user inputs non-valid
     if form.validate_on_submit():
         title = form.title.data
         artist = form.artist.data
+
+        # Check if inputs are empty spaces
+        if title.isspace() or artist.isspace():
+            flash("Title and Artist names are required", "danger")
+            return redirect("/songs/add")
 
         song = Song(title=title, artist=artist)
 
@@ -120,8 +124,6 @@ def add_song():
 
     return render_template("new_song.html", form=form)
 
-# ! spaces in strings
-# ! check valid name
 # ! description check if empty string
 @app.route("/playlists/<int:playlist_id>/add-song", methods=["GET", "POST"])
 def add_song_to_playlist(playlist_id):
