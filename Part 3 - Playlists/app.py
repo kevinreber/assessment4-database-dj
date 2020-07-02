@@ -65,6 +65,11 @@ def add_playlist():
         name = form.name.data
         desc = form.description.data
 
+        # Check if input is empty
+        if name.isspace():
+            flash("Platlist Name is required", "danger")
+            return redirect("/playlists/add")
+
         playlist = Playlist(name=name, description=desc)
 
         db.session.add(playlist)
@@ -124,7 +129,6 @@ def add_song():
 
     return render_template("new_song.html", form=form)
 
-# ! description check if empty string
 @app.route("/playlists/<int:playlist_id>/add-song", methods=["GET", "POST"])
 def add_song_to_playlist(playlist_id):
     """Add a playlist and redirect to list."""
